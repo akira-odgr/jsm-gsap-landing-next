@@ -14,7 +14,8 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
         // Lenis initialization
         const lenis = new Lenis({
             duration: 1.2,
-            smooth: true,
+            smoothWheel: true,
+            syncTouch: true,
             lerp: 0.1,
         });
 
