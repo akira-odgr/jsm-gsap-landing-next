@@ -5,7 +5,7 @@ import { cocktailLists, mockTailLists } from "@/data/data";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
-const Cocktails = () => {
+export const Cocktails = () => {
     useGSAP(() => {
         const parallaxTimeline = gsap.timeline({
             scrollTrigger: {

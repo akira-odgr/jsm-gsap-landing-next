@@ -3,14 +3,25 @@
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/all";
 import gsap from "gsap";
-import { useRef } from "react";
-import { useMediaQuery } from "react-responsive";
+import { useEffect, useRef, useState } from "react";
+// import { useMediaQuery } from "react-responsive";
 import Image from "next/image";
 
 export const Hero = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
 
-    const isMobile = useMediaQuery({ maxWidth: 767 });
+    useEffect(() => {
+        const checkIsMobile = () => {
+            setIsMobile(window.innerWidth <= 767);
+        };
+
+        checkIsMobile();
+        window.addEventListener("resize", checkIsMobile);
+        return () => window.removeEventListener("resize", checkIsMobile);
+    }, []);
+
+    // const isMobile = useMediaQuery({ maxWidth: 767 });
 
     useGSAP(() => {
         const heroSplit = new SplitText(".title", { type: "chars, words" });
