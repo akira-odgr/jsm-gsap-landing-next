@@ -15,7 +15,7 @@ export const Home = () => {
             <Navbar />
             <main>
                 <Hero />
-                <About />
+                <div className="h-dvh bg-black" />
             </main>
         </>
     );
