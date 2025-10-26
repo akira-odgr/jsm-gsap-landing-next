@@ -5,6 +5,7 @@ import { SplitText } from "gsap/all";
 import gsap from "gsap";
 import { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
+import Image from "next/image";
 
 export const Hero = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -49,42 +50,35 @@ export const Hero = () => {
         const endValue = isMobile ? "120% top" : "bottom top";
 
         // Video animation timeline
-        // LenisやScrollTriggerが安定してから初期化するため0.5秒遅延
-        setTimeout(() => {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: "video",
-                    start: startValue,
-                    end: endValue,
-                    scrub: true,
-                    pin: true,
-                },
-            });
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "video",
+                start: startValue,
+                end: endValue,
+                scrub: true,
+                pin: true,
+            },
+        });
 
-            // tl.to(videoRef.current, {
-            //     currentTime: videoRef.current.duration,
-            //     ease: "none", // ← スクロールに合わせて滑らかに進む
-            // });
-            // Wait for video to load and then set up the animation
-            const setupVideoAnimation = () => {
-                if (videoRef.current && videoRef.current.duration) {
-                    tl.to(videoRef.current, {
-                        currentTime: videoRef.current.duration,
-                    });
-                }
-            };
-
-            if (videoRef.current) {
-                if (videoRef.current.readyState >= 1) {
-                    // Video is already loaded
-                    setupVideoAnimation();
-                } else {
-                    // Wait for video to load
-                    videoRef.current.onloadedmetadata = setupVideoAnimation;
-                    videoRef.current.oncanplay = setupVideoAnimation;
-                }
+        // Wait for video to load and then set up the animation
+        const setupVideoAnimation = () => {
+            if (videoRef.current && videoRef.current.duration) {
+                tl.to(videoRef.current, {
+                    currentTime: videoRef.current.duration,
+                });
             }
-        }, 500); // ← 遅延時間（500ms = 0.5秒）
+        };
+
+        if (videoRef.current) {
+            if (videoRef.current.readyState >= 1) {
+                // Video is already loaded
+                setupVideoAnimation();
+            } else {
+                // Wait for video to load
+                videoRef.current.onloadedmetadata = setupVideoAnimation;
+                videoRef.current.oncanplay = setupVideoAnimation;
+            }
+        }
     }, []);
 
     return (
@@ -92,15 +86,19 @@ export const Hero = () => {
             <section id="hero" className="noisy">
                 <h1 className="title">MOJITO</h1>
 
-                <img
+                <Image
                     src="/images/hero-left-leaf.png"
                     alt="left-leaf"
                     className="left-leaf"
+                    width={200}
+                    height={200}
                 />
-                <img
+                <Image
                     src="/images/hero-right-leaf.png"
                     alt="right-leaf"
                     className="right-leaf"
+                    width={200}
+                    height={200}
                 />
 
                 <div className="body">
