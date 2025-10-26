@@ -49,35 +49,42 @@ export const Hero = () => {
         const endValue = isMobile ? "120% top" : "bottom top";
 
         // Video animation timeline
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "video",
-                start: startValue,
-                end: endValue,
-                scrub: true,
-                pin: true,
-            },
-        });
+        // LenisやScrollTriggerが安定してから初期化するため0.5秒遅延
+        setTimeout(() => {
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "video",
+                    start: startValue,
+                    end: endValue,
+                    scrub: true,
+                    pin: true,
+                },
+            });
 
-        // Wait for video to load and then set up the animation
-        const setupVideoAnimation = () => {
-            if (videoRef.current && videoRef.current.duration) {
-                tl.to(videoRef.current, {
-                    currentTime: videoRef.current.duration,
-                });
-            }
-        };
+            // tl.to(videoRef.current, {
+            //     currentTime: videoRef.current.duration,
+            //     ease: "none", // ← スクロールに合わせて滑らかに進む
+            // });
+            // Wait for video to load and then set up the animation
+            const setupVideoAnimation = () => {
+                if (videoRef.current && videoRef.current.duration) {
+                    tl.to(videoRef.current, {
+                        currentTime: videoRef.current.duration,
+                    });
+                }
+            };
 
-        if (videoRef.current) {
-            if (videoRef.current.readyState >= 1) {
-                // Video is already loaded
-                setupVideoAnimation();
-            } else {
-                // Wait for video to load
-                videoRef.current.onloadedmetadata = setupVideoAnimation;
-                videoRef.current.oncanplay = setupVideoAnimation;
+            if (videoRef.current) {
+                if (videoRef.current.readyState >= 1) {
+                    // Video is already loaded
+                    setupVideoAnimation();
+                } else {
+                    // Wait for video to load
+                    videoRef.current.onloadedmetadata = setupVideoAnimation;
+                    videoRef.current.oncanplay = setupVideoAnimation;
+                }
             }
-        }
+        }, 500); // ← 遅延時間（500ms = 0.5秒）
     }, []);
 
     return (
